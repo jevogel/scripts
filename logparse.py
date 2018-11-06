@@ -16,17 +16,15 @@ def main():
         input_text = f.read()
 
     regex = re.compile(
-        r'(?P<datetime>(?P<time>(\d+):(\d+) '
-        '([AP]M)) '
-        '(?P < date > (\d +)/(\d+)/(\d+)))\n'
-        '(?P<text>.*)', re.MULTILINE)
+        r'(?P<datetime>(\d+):(\d+) ([AP]M) (\d+)/(\d+)/(\d+))\n'
+        r'(?P<text>.*)', re.MULTILINE)
 
     text_lines = [m.groupdict() for m in regex.finditer(input_text)]
     csv_lines = ['{:%m/%d/%y %I:%M %p},{}\r\n'.format(
         parse(line['datetime']), line['text']) for line in text_lines]
 
     with open(output_file, 'w') as f:
-        f.write('Time,Description')
+        f.write('Time,Description\r\n')
         f.writelines(csv_lines)
 
 
